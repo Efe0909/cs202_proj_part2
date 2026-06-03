@@ -1,0 +1,265 @@
+/* =============================================================================
+ *  Online Food Ordering System — shared design system
+ *  One stylesheet applied to every Scene. Palette + typography + components.
+ * ============================================================================= */
+
+/* ---- Palette (referenced via -fx-... looked-up colors) --------------------- */
+.root {
+    -app-bg:            #f4f5f7;   /* window background          */
+    -app-surface:       #ffffff;   /* cards / panels             */
+    -app-surface-alt:   #fafbfc;   /* striped rows / subtle fill */
+    -app-border:        #e2e5e9;   /* hairline borders           */
+    -app-primary:       #e8542b;   /* brand orange (food/appetite) */
+    -app-primary-dark:  #c8431f;
+    -app-primary-soft:  #fdeee9;
+    -app-secondary:     #2d3748;   /* slate for secondary actions */
+    -app-danger:        #d23b3b;
+    -app-danger-dark:   #b32e2e;
+    -app-success:       #2e8b57;
+    -app-text:          #1f2933;
+    -app-text-muted:    #6b7280;
+    -app-accent:        #2b6cb0;
+
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Inter", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: -app-bg;
+}
+
+/* ---- Typography scale ------------------------------------------------------ */
+.h1 { -fx-font-size: 24px; -fx-font-weight: bold;  -fx-text-fill: -app-text; }
+.h2 { -fx-font-size: 18px; -fx-font-weight: bold;  -fx-text-fill: -app-text; }
+.h3 { -fx-font-size: 15px; -fx-font-weight: bold;  -fx-text-fill: -app-text; }
+.subtle      { -fx-text-fill: -app-text-muted; }
+.muted-italic{ -fx-text-fill: -app-text-muted; -fx-font-style: italic; }
+.status-error   { -fx-text-fill: -app-danger;  -fx-font-weight: bold; }
+.status-success { -fx-text-fill: -app-success; -fx-font-weight: bold; }
+
+.label { -fx-text-fill: -app-text; }
+
+/* ---- Buttons --------------------------------------------------------------- */
+.button {
+    -fx-background-color: -app-surface;
+    -fx-text-fill: -app-text;
+    -fx-border-color: -app-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 7 16 7 16;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+.button:hover  { -fx-background-color: -app-surface-alt; -fx-border-color: #c9cdd3; }
+.button:focused{ -fx-border-color: -app-accent; }
+.button:disabled { -fx-opacity: 0.45; -fx-cursor: default; }
+
+.button.primary {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+}
+.button.primary:hover { -fx-background-color: -app-primary-dark; }
+
+.button.danger {
+    -fx-background-color: -app-danger;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+}
+.button.danger:hover { -fx-background-color: -app-danger-dark; }
+
+.button.secondary {
+    -fx-background-color: -app-secondary;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+.button.secondary:hover { -fx-background-color: derive(-app-secondary, 18%); }
+
+/* Flat / ghost button (used for nav + inline links) */
+.button.ghost {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -app-accent;
+}
+.button.ghost:hover { -fx-background-color: -app-primary-soft; }
+
+/* Sidebar navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #d6dde7;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 14 10 14;
+    -fx-background-radius: 6;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+.nav-button:hover    { -fx-background-color: rgba(255,255,255,0.10); -fx-text-fill: white; }
+.nav-button:focused  { -fx-background-color: rgba(255,255,255,0.16); -fx-text-fill: white; }
+
+/* ---- Inputs ---------------------------------------------------------------- */
+.text-field, .password-field, .text-area, .choice-box, .combo-box, .spinner {
+    -fx-background-color: -app-surface;
+    -fx-border-color: -app-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 7 10 7 10;
+    -fx-prompt-text-fill: #9aa1ab;
+}
+.text-area { -fx-padding: 0; }
+.text-area .content { -fx-padding: 8 10 8 10; }
+.text-field:focused, .password-field:focused, .text-area:focused,
+.choice-box:focused, .combo-box:focused {
+    -fx-border-color: -app-primary;
+}
+
+/* ---- Cards / panels -------------------------------------------------------- */
+.card {
+    -fx-background-color: -app-surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -app-border;
+    -fx-border-radius: 10;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 14, 0, 0, 3);
+}
+.panel {
+    -fx-background-color: -app-surface;
+    -fx-background-radius: 8;
+    -fx-border-color: -app-border;
+    -fx-border-radius: 8;
+    -fx-padding: 16;
+}
+.content-pane { -fx-background-color: -app-bg; }
+
+/* App header bar (top of dashboards / auth screens) */
+.app-header {
+    -fx-background-color: -app-surface;
+    -fx-border-color: -app-border;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 14 20 14 20;
+}
+.brand {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-primary;
+}
+
+/* Sidebar container */
+.sidebar {
+    -fx-background-color: -app-secondary;
+    -fx-padding: 16 12 16 12;
+}
+.sidebar .label { -fx-text-fill: #9aa6b5; }
+
+/* Selected-address pill / picker in the customer header */
+.address-pill {
+    -fx-background-color: -app-primary-soft;
+    -fx-border-color: derive(-app-primary, 40%);
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+    -fx-text-fill: -app-primary-dark;
+    -fx-padding: 6 14 6 14;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.address-pill:hover { -fx-background-color: derive(-app-primary-soft, -4%); }
+
+/* "New" / status badges */
+.badge {
+    -fx-background-color: -app-success;
+    -fx-text-fill: white;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.badge-selected {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: white;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* ---- Lists & tables -------------------------------------------------------- */
+.list-view, .table-view {
+    -fx-background-color: -app-surface;
+    -fx-border-color: -app-border;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.list-cell {
+    -fx-padding: 10 12 10 12;
+    -fx-background-color: -app-surface;
+    -fx-text-fill: -app-text;
+}
+.list-cell:odd  { -fx-background-color: -app-surface-alt; }
+.list-cell:filled:hover { -fx-background-color: -app-primary-soft; }
+.list-cell:filled:selected {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: white;
+}
+.list-cell:filled:selected .label { -fx-text-fill: white; }
+
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: -app-surface-alt;
+}
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text;
+}
+.table-row-cell { -fx-background-color: -app-surface; -fx-border-color: transparent; }
+.table-row-cell:odd { -fx-background-color: -app-surface-alt; }
+.table-row-cell:selected { -fx-background-color: -app-primary-soft; }
+.table-row-cell:selected .text { -fx-fill: -app-text; }
+
+/* Repurposed list/menu item rows */
+.item-row {
+    -fx-background-color: -app-surface;
+    -fx-border-color: -app-border;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 12;
+}
+.price-tag {
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-primary-dark;
+}
+
+/* ---- Tabs ------------------------------------------------------------------ */
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: transparent; }
+.tab-pane .tab {
+    -fx-background-color: -app-surface-alt;
+    -fx-background-radius: 6 6 0 0;
+    -fx-padding: 6 14 6 14;
+}
+.tab-pane .tab:selected { -fx-background-color: -app-surface; }
+.tab-pane .tab .tab-label { -fx-text-fill: -app-text; -fx-font-weight: bold; }
+
+/* ---- Titled panes ---------------------------------------------------------- */
+.titled-pane > .title {
+    -fx-background-color: -app-surface-alt;
+    -fx-border-color: -app-border;
+    -fx-background-radius: 8 8 0 0;
+    -fx-font-weight: bold;
+    -fx-padding: 8 12 8 12;
+}
+.titled-pane > .content {
+    -fx-background-color: -app-surface;
+    -fx-border-color: -app-border;
+    -fx-background-radius: 0 0 8 8;
+}
+
+/* ---- ScrollPane ------------------------------------------------------------ */
+.scroll-pane, .scroll-pane > .viewport { -fx-background-color: transparent; }
+
+/* ---- Separator ------------------------------------------------------------- */
+.separator .line { -fx-border-color: -app-border; }
+
+/* ---- Empty-state message --------------------------------------------------- */
+.empty-state {
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-padding: 40;
+}

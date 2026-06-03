@@ -1,0 +1,47 @@
+<configuration>
+
+    <property name="LOG_DIR" value="/app/logs"/>
+    <property name="LOG_FILE" value="${LOG_DIR}/app.log"/>
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} — %msg%n"/>
+
+    <!-- Console (stdout → Docker logs) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling file → mounted volume (daily, max 7 days, max 50MB per file) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>200MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Application code: DEBUG so DAO SQL and service calls appear -->
+    <logger name="org.example" level="DEBUG"/>
+
+    <!-- HTTP request/response summary -->
+    <logger name="http" level="INFO"/>
+
+    <!-- Spring web: INFO -->
+    <logger name="org.springframework.web" level="INFO"/>
+
+    <!-- Suppress noisy Hibernate / HikariCP DEBUG output -->
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+    <logger name="com.mysql" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,35 @@
+<configuration>
+
+    <!--
+      Console-only Logback config used ONLY by the DB-backed
+      StatisticsServiceSeedIntegrationTest @SpringBootTest.
+
+      The production logback-spring.xml writes to a RollingFileAppender at
+      the hardcoded path /app/logs/app.log. That path is a mounted volume in
+      the real backend container, but the `make test-fresh` test container
+      copies the source to /build and has no writable /app/logs, so booting
+      the Spring context with the production logging config makes Logback
+      fail fatally (FileNotFoundException -> context load failure).
+
+      This is purely a TEST-ENVIRONMENT concern: the test overrides
+      `logging.config` to point here so the integration test can boot the
+      real context without depending on a writable log directory. Production
+      logging behavior is intentionally left untouched.
+    -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.example"         level="INFO"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="com.zaxxer.hikari"   level="WARN"/>
+    <logger name="com.mysql"           level="WARN"/>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

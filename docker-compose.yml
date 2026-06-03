@@ -1,0 +1,67 @@
+services:
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${DB_NAME:-food_ordering}
+      MYSQL_USER: ${DB_USER:-fooduser}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-foodpass}
+    volumes:
+      # DDL runs first (alphabetical order), DML second
+      - ./DDL.sql:/docker-entrypoint-initdb.d/01-DDL.sql:ro
+      - ./DML.sql:/docker-entrypoint-initdb.d/02-DML.sql:ro
+      - db_data:/var/lib/mysql
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1",
+             "-u", "root", "-p${DB_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    profiles: [run]
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    environment:
+      HEADLESS: "true"
+      SPRING_DATASOURCE_URL: >-
+        jdbc:mysql://db:3306/${DB_NAME:-food_ordering}
+        ?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-fooduser}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-foodpass}
+    volumes:
+      - backend_logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+
+  test:
+    profiles: [test]
+    image: maven:3.9-eclipse-temurin-17
+    working_dir: /app
+    volumes:
+      - .:/app:ro
+      - maven_cache:/root/.m2
+    environment:
+      SPRING_DATASOURCE_URL: >-
+        jdbc:mysql://db:3306/${DB_NAME:-food_ordering}
+        ?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-fooduser}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-foodpass}
+    # Source is read-only; copy to a writable dir so Maven can write target/.
+    command: sh -c "cp -r /app /build && cd /build && mvn test -P backend -q"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  maven_cache:
+  backend_logs:
